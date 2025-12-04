@@ -2,30 +2,35 @@ import { useEffect, useState } from "react";
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(true);     // ← estado de carga
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        setLoading(true); // iniciar carga
+        setLoading(true);
+        setError(null); // limpiar error anterior si existe
+
         const res = await fetch("https://jsonplaceholder.typicode.com/todos");
-        if (!res.ok) throw new Error("Error al traer los datos");
+
+        if (!res.ok) {
+          throw new Error("No se pudo obtener la lista de tareas");
+        }
 
         const data = await res.json();
         setTodos(data);
       } catch (err) {
-        setError(err.message);
+        setError(err.message); // guardar mensaje de error
       } finally {
-        setLoading(false); // finalizar carga
+        setLoading(false);
       }
     };
 
     fetchTodos();
   }, []);
 
-  if (loading) return <p>Cargando tareas...</p>;      // ← mensaje de espera
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p>Cargando tareas...</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
     <div>
