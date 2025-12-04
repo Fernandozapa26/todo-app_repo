@@ -1,76 +1,44 @@
 import { useEffect, useState } from "react";
 
-export default function Todos() {
+const Todos = () => {
   const [todos, setTodos] = useState([]);
-  const [nuevoTodo, setNuevoTodo] = useState("");
+  const [loading, setLoading] = useState(true);     // ← estado de carga
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
+        setLoading(true); // iniciar carga
         const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+        if (!res.ok) throw new Error("Error al traer los datos");
+
         const data = await res.json();
         setTodos(data);
-      } catch (error) {
-        console.error("Error al obtener los todos:", error);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false); // finalizar carga
       }
     };
 
     fetchTodos();
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (nuevoTodo.trim() === "") {
-      alert("El campo no puede estar vacío");
-      return;
-    }
-
-    console.log("Nuevo TODO creado:", nuevoTodo);
-    setNuevoTodo("");
-  };
-
-  const toggleCompletado = (id) => {
-    const todosActualizados = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-    setTodos(todosActualizados);
-  };
-
-  const eliminarTodo = (id) => {
-    const filtrados = todos.filter((todo) => todo.id !== id);
-    setTodos(filtrados);
-  };
+  if (loading) return <p>Cargando tareas...</p>;      // ← mensaje de espera
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
-      <h1>Listado de Todos</h1>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Escribe un nuevo todo"
-          value={nuevoTodo}
-          onChange={(e) => setNuevoTodo(e.target.value)}
-        />
-        <button type="submit">Crear</button>
-      </form>
-
-      <hr />
-
+      <h1>Lista de TODOS</h1>
       <ul>
-        {todos.map((todo) => (
+        {todos.map(todo => (
           <li key={todo.id}>
-            {todo.title} — {todo.completed ? "✅ Completado" : "❌ Pendiente"}
-            <button onClick={() => toggleCompletado(todo.id)}>
-              Cambiar estado
-            </button>
-            <button onClick={() => eliminarTodo(todo.id)}>
-              Eliminar
-            </button>
+            {todo.title} {todo.completed ? "✔️" : "❌"}
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
+
+export default Todos;
