@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function Todos() {
   const [todos, setTodos] = useState([]);
+  const [nuevoTodo, setNuevoTodo] = useState("");
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -17,10 +18,37 @@ export default function Todos() {
     fetchTodos();
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (nuevoTodo.trim() === "") {
+      alert("El campo no puede estar vacío");
+      return;
+    }
+
+    console.log("Nuevo TODO creado:", nuevoTodo);
+
+    setNuevoTodo(""); // limpiar input
+  };
+
   return (
     <div>
       <h1>Listado de Todos</h1>
 
+      {/* FORMULARIO */}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Escribe un nuevo todo"
+          value={nuevoTodo}
+          onChange={(e) => setNuevoTodo(e.target.value)}
+        />
+        <button type="submit">Crear</button>
+      </form>
+
+      <hr />
+
+      {/* LISTADO */}
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
