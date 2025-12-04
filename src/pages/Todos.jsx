@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import TodoList from "../components/TodoList";
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
@@ -9,18 +10,16 @@ const Todos = () => {
     const fetchTodos = async () => {
       try {
         setLoading(true);
-        setError(null); // limpiar error anterior si existe
+        setError(null);
 
         const res = await fetch("https://jsonplaceholder.typicode.com/todos");
 
-        if (!res.ok) {
-          throw new Error("No se pudo obtener la lista de tareas");
-        }
+        if (!res.ok) throw new Error("Error al obtener los TODOS");
 
         const data = await res.json();
         setTodos(data);
       } catch (err) {
-        setError(err.message); // guardar mensaje de error
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -35,13 +34,7 @@ const Todos = () => {
   return (
     <div>
       <h1>Lista de TODOS</h1>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo.id}>
-            {todo.title} {todo.completed ? "✔️" : "❌"}
-          </li>
-        ))}
-      </ul>
+      <TodoList todos={todos} />
     </div>
   );
 };
