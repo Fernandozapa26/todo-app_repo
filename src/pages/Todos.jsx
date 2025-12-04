@@ -27,15 +27,21 @@ export default function Todos() {
     }
 
     console.log("Nuevo TODO creado:", nuevoTodo);
+    setNuevoTodo("");
+  };
 
-    setNuevoTodo(""); // limpiar input
+  const toggleCompletado = (id) => {
+    const todosActualizados = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+
+    setTodos(todosActualizados);
   };
 
   return (
     <div>
       <h1>Listado de Todos</h1>
 
-      {/* FORMULARIO */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -48,11 +54,13 @@ export default function Todos() {
 
       <hr />
 
-      {/* LISTADO */}
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
-            {todo.title} — {todo.completed ? "✅ Completado" : "❌ Pendiente"}
+            {todo.title} — {todo.completed ? "✅ Completado" : "❌ Pendiente"}{" "}
+            <button onClick={() => toggleCompletado(todo.id)}>
+              Cambiar estado
+            </button>
           </li>
         ))}
       </ul>
