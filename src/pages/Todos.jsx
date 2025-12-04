@@ -9,7 +9,6 @@ export default function Todos() {
         const res = await fetch("https://jsonplaceholder.typicode.com/todos");
         const data = await res.json();
         setTodos(data);
-        console.log("Todos obtenidos:", data);
       } catch (error) {
         console.error("Error al obtener los todos:", error);
       }
@@ -20,8 +19,15 @@ export default function Todos() {
 
   return (
     <div>
-      <h1>Listado de Todos (fetch inicial)</h1>
-      <p>Revisa la consola para ver los datos obtenidos.</p>
+      <h1>Listado de Todos</h1>
+
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            {todo.title} — {todo.completed ? "✅ Completado" : "❌ Pendiente"}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
