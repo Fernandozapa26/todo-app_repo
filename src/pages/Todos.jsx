@@ -34,8 +34,12 @@ export default function Todos() {
     const todosActualizados = todos.map((todo) =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
-
     setTodos(todosActualizados);
+  };
+
+  const eliminarTodo = (id) => {
+    const filtrados = todos.filter((todo) => todo.id !== id);
+    setTodos(filtrados);
   };
 
   return (
@@ -57,9 +61,12 @@ export default function Todos() {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
-            {todo.title} — {todo.completed ? "✅ Completado" : "❌ Pendiente"}{" "}
+            {todo.title} — {todo.completed ? "✅ Completado" : "❌ Pendiente"}
             <button onClick={() => toggleCompletado(todo.id)}>
               Cambiar estado
+            </button>
+            <button onClick={() => eliminarTodo(todo.id)}>
+              Eliminar
             </button>
           </li>
         ))}
