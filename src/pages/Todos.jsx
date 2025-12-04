@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import TodoList from "../components/TodoList";
+import TodoFilters from "../components/TodoFilters";
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Placeholder para editar (aún sin lógica)
-  const handleEdit = (todo) => {
-    console.log("En el futuro aquí se editará:", todo);
-    alert(`Editar TODO: ${todo.title} (función aún no implementada)`);
+  // Placeholder para filtros (sin lógica)
+  const handleFilter = (filterType) => {
+    console.log("Filtro seleccionado:", filterType);
+    alert(`Filtro '${filterType}' aún no implementado`);
   };
 
   useEffect(() => {
@@ -39,7 +40,11 @@ const Todos = () => {
   return (
     <div>
       <h1>Lista de TODOS</h1>
-      <TodoList todos={todos} onEdit={handleEdit} />
+
+      {/* Componente de filtros (placeholder) */}
+      <TodoFilters onFilter={handleFilter} />
+
+      <TodoList todos={todos} onEdit={() => {}} />
     </div>
   );
 };
